@@ -193,6 +193,14 @@ def test_command():
 
     remote.control("KEY_MUTE")
 
+def connect(myMQTTClient):
+    for i in range(0, 1000):
+        try:
+            myMQTTClient.connect()
+        except:
+            continue;
+        return
+
 
 def startServer(muteoutput):
     global remote
@@ -235,7 +243,9 @@ def startServer(muteoutput):
     myMQTTClient.configureConnectDisconnectTimeout(10)  # 10 sec
     myMQTTClient.configureMQTTOperationTimeout(5)  # 5 sec
     print('starting server...')
-    myMQTTClient.connect()
+
+
+    connect(myMQTTClient)
 
     myMQTTClient.subscribe("power/" + clientid, 1, power)
     myMQTTClient.subscribe("channel/" + clientid, 1, channel)
