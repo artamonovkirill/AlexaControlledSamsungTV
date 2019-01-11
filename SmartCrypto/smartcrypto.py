@@ -7,6 +7,9 @@ import requests
 import time
 import websocket
 
+
+ctxFLAG = False
+
 class SmartCrypto:
 
     UserId = "654321"
@@ -116,7 +119,7 @@ class SmartCrypto:
 
     def __init__(self, ip):
         self.tvIP = ip
-        if (True):
+        if (!ctxFLAG):
             self.StartPairing()
             SKPrime = False
             while self.ctx == '':
