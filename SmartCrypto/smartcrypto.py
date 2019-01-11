@@ -26,7 +26,8 @@ class SmartCrypto:
         requests.post(self.getFullUrl("/ws/apps/CloudPINPage"), "pin4")
 
     def CheckPinPageOnTv(self):
-        full_url = selfgetFullUrl("/ws/apps/CloudPINPage")
+        full_url = self.getFullUrl("/ws/apps/CloudPINPage")
+        print(full_url)
         page = requests.get(full_url).text
         output = re.search('state>([^<>]*)</state>', page, flags=re.IGNORECASE)
         if output is not None:
@@ -41,7 +42,7 @@ class SmartCrypto:
         firstStepResponse = requests.get(firstStepURL).text
 
     def StartPairing(self):
-        self.lastRequestId=0
+        self.lastRequestId = 0
         if self.CheckPinPageOnTv():
             print("Pin NOT on TV")
             self.ShowPinPageOnTv()
@@ -49,7 +50,7 @@ class SmartCrypto:
             print("Pin ON TV");
 
     def HelloExchange(self, pin):
-        hello_output = crypto.generateServerHello(UserId,pin)
+        hello_output = crypto.generateServerHello(self.UserId, pin)
         if not hello_output:
             return False
         content = "{\"auth_Data\":{\"auth_type\":\"SPC\",\"GeneratorServerHello\":\"" + hello_output['serverHello'].hex().upper() + "\"}}"
@@ -112,7 +113,7 @@ class SmartCrypto:
 
 
     def __init__(self, ip):
-        tvIP = ip
+        self.tvIP = ip
         if (True):
             self.StartPairing()
             ctx = False
