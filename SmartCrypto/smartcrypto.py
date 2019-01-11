@@ -116,7 +116,6 @@ class SmartCrypto:
         self.tvIP = ip
         if (True):
             self.StartPairing()
-            self.ctx = False
             SKPrime = False
             while self.ctx == '':
                 tvPIN = input("Please enter pin from tv: ")
