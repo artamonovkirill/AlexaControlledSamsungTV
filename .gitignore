@@ -4,3 +4,4 @@
 .auth/uuid
 helpers/lineup.json
 *__pycache__*
+SmartCrypto/.git/*

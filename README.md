@@ -1,8 +1,9 @@
-## To run you will need Python3 with the following pip packages installed
- 
-websocket-client<br>     
-AWSIoTPythonSDK<br>     
-requests
+###This repository if a combination of the repositories located at https://github.com/eclair4151/AlexaControlledSamsungTV, and https://github.com/eclair4151/SmartCrypto in order to add Alexa support from Series H (and potentially but untested Series J) Smart TVs from Samsung
+
+## To run you will need python3 and packages present in requirements.txt as well as cec-utils
+
+`pip3 install -r requirements.txt`
+`sudo apt-get install cec-utils`
 
 ## Setup
 
@@ -18,16 +19,16 @@ python3 alexasmartcli.py scan
 It should output the ip, mac address, and model.    
 put those into the tvconfig.py file. The tvconfig should be in this format: 
 ```
-device_name = "Home Raspberry PI" #What shows up under devices in alexasmarttv.tk. not that important unless you have multiple devices (not tvs) on your account
-volume_step_size = 10  #how much your tv volume should go up by when you say 'Alexa, turn up the volume on my tv'
+device_name = "Pi" #What shows up under devices in alexasmarttv.tk. not that important unless you have multiple devices (not tvs) on your account
+volume_step_size = 5  #how much your tv volume should go up by when you say 'Alexa, turn up the volume on my tv'
 
 
 tvs = [
     {
-        'host': ".....", #ip address of tv
-        'tv_model' : '....',
-        'tv_mac_address': "....",
-        'tv_name' : 'TV', #Leave as TV to refrence this by just 'TV'. ex: 'Alexa, turn on the TV'.  Change to eg:'Kitchen TV' if you want to say 'Alexa turn on the kitchen TV', You cannot have multiple tvs have the same name
+        'host': "xxx.xxx.xxx.xxx", #ip address of tv
+        'tv_model' : 'xxxxxxxxx', #9 digit tv model located on the back of your tv
+        'tv_mac_address': "xxx.xxx.xxx.xxx", #mac address of your tv
+        'tv_name' : 'TV', #leave as TV to refrence this by just 'TV'. ex: 'Alexa, turn on the TV'.  Change to eg:'Kitchen TV' if you want to say 'Alexa turn on the kitchen TV', You cannot have multiple tvs have the same name
         'prefer_HD': True, #if you say 'change the channel to ESPN',  always attempt to use the HD channel number'
     },
     {
@@ -48,6 +49,7 @@ python3 alexasmartcli.py login
 python3 alexasmartcli.py register (you will need to run this command anytime you change/add/remove a tv from tvconfig)
 python3 alexasmartcli.py setup_cable (optional and only currently works in the US)
 python3 alexasmartcli.py start (run with -m to mute the output)
+If you are running start for the first time (or if you have the ctx flag set to false), you will need to input a pin shown on your TV. If you don't want to input a pin every time you start your Rasberry Pi up then you can copy the ctf and sessionId that are printed after making the connection and paste them into SmartCrypto/smartcrypto.py at the bottom where it says currentSessionId and ctx. Afterwards, change the ctx flag at the top to True.
 ```
 
 to run this server in the backround automatically when your pi boots up place this line in your /etc/rc.local file (before the exit line):
@@ -65,7 +67,7 @@ Tutorial:<br>
 [![Alexa Setup Tutorial](https://img.youtube.com/vi/-uhd33FiEUM/0.jpg)](https://www.youtube.com/watch?v=-uhd33FiEUM)
 
 ### Currently supported commands:
-* Alexa turn on the TV    (Only supported on K,M, and QLED TVS (2016 and newer))
+* Alexa turn on the TV    (this command only works if your TV supports CEC/Anynet (and CEC/Anynet is turned on) and your Rasberry Pi is connected via HDMI to the TV. If your TV supports wake on lan (WOL) then you can run pip3 install wakeonlan and change the line `os.system('echo on 0 | cec-client -s -d 1')` with `send_magic_oacket(payload['endpointid'])` and add `from wakeonlan import send_magic_packet` to the top)
 * Alexa turn off the TV
 
 * Alexa (un)mute the TV
@@ -113,8 +115,8 @@ if nothing seems to happen these are some steps you can take to debug:
 
 * if discovering TVs through the Alexa app does not discover the tvs correctly try running python3 alexasmartcli.py register and restarting the server. Then try to rediscover your tvs.
 
-## Disclaimer:
-1) H and J series TVs are currently unsupported but are being worked on to support it
+* if alexa is communicating with you Rasberry Pi but commands are not working, you can try updating your ctx credentials by setting the ctx flag to False and redoing the pin
 
-2) If you have a cable box, in order to change the channel the alexa sends a command to the smart remote which sends it back to the cable box over RF. Because of this for the command 'alexa change the channel' to work the remote needs to have line of sight with the cable box
+## Disclaimer:
+1) If you have a cable box, in order to change the channel the alexa sends a command to the smart remote which sends it back to the cable box over RF. Because of this for the command 'alexa change the channel' to work the remote needs to have line of sight with the cable box
 

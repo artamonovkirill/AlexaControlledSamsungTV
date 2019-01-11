@@ -2,10 +2,10 @@ from optparse import OptionParser
 import json
 import requests
 import getpass
-from  helpers import prefHelper
+from helpers import prefHelper
 import tvconfig
 import re
-from  helpers import mqtt_server
+from helpers import mqtt_server
 import os
 from helpers.ssdp import scan_network_ssdp
 
