@@ -119,7 +119,7 @@ class SmartCrypto:
 
     def __init__(self, ip):
         self.tvIP = ip
-        if (!ctxFLAG):
+        if (not ctxFLAG):
             self.StartPairing()
             SKPrime = False
             while self.ctx == '':
