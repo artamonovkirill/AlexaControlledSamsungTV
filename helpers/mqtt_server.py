@@ -199,7 +199,7 @@ def startServer(muteoutput):
     global tv_channels
     global tv_dict
     global mute
-    remote = SmartCrypto(tvconfig.tvs[0].host)
+    remote = SmartCrypto(tvconfig.tvs[0]['host'])
     mute = muteoutput
     if os.path.isfile('helpers/lineup.json'):
         with open('helpers/lineup.json') as json_data:
