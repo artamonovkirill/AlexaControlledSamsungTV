@@ -1,9 +1,9 @@
 from __future__ import print_function
 from Crypto.Cipher import AES
 import hashlib
-import keys
+from . import keys
 import struct
-from py3rijndael.rijndael import Rijndael
+from .py3rijndael.rijndael import Rijndael
 
 BLOCK_SIZE = 16
 SHA_DIGEST_LENGTH = 20
@@ -58,7 +58,7 @@ def parseClientHello(clientHello, dataHash, aesKey, gUserId):
     firstLen=struct.unpack(">I",data[7:11])[0]
     userIdLen=struct.unpack(">I",data[11:15])[0]
     destLen = userIdLen + 132 + SHA_DIGEST_LENGTH # Always equals firstLen????:)
-    thirdLen = userIdLen + 132 
+    thirdLen = userIdLen + 132
     print("thirdLen: "+str(thirdLen))
     print("hello: " + data.hex())
     dest = data[USER_ID_LEN_POS:thirdLen+USER_ID_LEN_POS] + dataHash

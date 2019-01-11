@@ -1,6 +1,6 @@
 import copy
 from .paddings import PaddingBase
-from py3rijndael.constants import (
+from SmartCrypto.py3rijndael.constants import (
     shifts, r_con, num_rounds, S, Si,
     U1, U2, U3, U4,
     T1, T2, T3, T4, T5, T6, T7, T8
