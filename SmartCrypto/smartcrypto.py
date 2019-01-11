@@ -15,7 +15,7 @@ class SmartCrypto:
     tvIP = "192.168.xxx.xxx"
     tvPort = "8080"
 
-    ctf = ''
+    ctx = ''
     currentSessionId = 0
 
     lastRequestId = 0
@@ -30,7 +30,6 @@ class SmartCrypto:
 
     def CheckPinPageOnTv(self):
         full_url = self.getFullUrl("/ws/apps/CloudPINPage")
-        print(full_url)
         page = requests.get(full_url).text
         output = re.search('state>([^<>]*)</state>', page, flags=re.IGNORECASE)
         if output is not None:
