@@ -127,7 +127,7 @@ class SmartCrypto:
                 if output:
                     self.ctx = output['ctx'].hex()
                     SKPrime = output['SKPrime']
-                    print("ctx: " + ctx)
+                    print("ctx: " + self.ctx)
                     print("Pin accepted :)\n")
                 else:
                     print("Pin incorrect. Please try again...\n")
