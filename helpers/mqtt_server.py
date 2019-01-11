@@ -9,7 +9,7 @@ from helpers import prefHelper
 import math
 from difflib import get_close_matches
 import os.path
-from PySmartCrypto import smartcrypto as remote
+from SmartCrypto import smartcrypto as remote
 
 
 def power_off_command(tv_mac_address):
