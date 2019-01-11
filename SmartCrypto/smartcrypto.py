@@ -95,9 +95,9 @@ class SmartCrypto:
     def send_command(self, session_id, ctx, key_command):
         ctx = ctx.upper()
         millis = int(round(time.time() * 1000))
-        step4_url = 'http://' + tvIP + ':8000/socket.io/1/?t=' + str(millis)
+        step4_url = 'http://' + self.tvIP + ':8000/socket.io/1/?t=' + str(millis)
         websocket_response = requests.get(step4_url)
-        websocket_url = 'ws://' + tvIP + ':8000/socket.io/1/websocket/' + websocket_response.text.split(':')[0]
+        websocket_url = 'ws://' + self.tvIP + ':8000/socket.io/1/websocket/' + websocket_response.text.split(':')[0]
         print(websocket_url)
 
         aesLib = AESCipher(ctx, session_id)
