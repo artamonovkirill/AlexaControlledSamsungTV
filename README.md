@@ -121,3 +121,5 @@ if nothing seems to happen these are some steps you can take to debug:
 
 ## Disclaimer:
 1) If you have a cable box, in order to change the channel the alexa sends a command to the smart remote which sends it back to the cable box over RF. Because of this for the command 'alexa change the channel' to work the remote needs to have line of sight with the cable box
+
+2) If your TV automatically changes to show your Rasberry Pi when you turn it on, then you can try disabling CEC at boot using the steps located at http://alexnj.com/blog/disable-hdmi-switching-on-raspberry-pi-and-noobs/.
