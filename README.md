@@ -1,4 +1,4 @@
-##This repository if a combination of the repositories located at https://github.com/eclair4151/AlexaControlledSamsungTV, and https://github.com/eclair4151/SmartCrypto in order to add Alexa support from Series H (and potentially but untested Series J) Smart TVs from Samsung
+#Note: This repository if a combination of the repositories located at https://github.com/eclair4151/AlexaControlledSamsungTV, and https://github.com/eclair4151/SmartCrypto in order to add Alexa support from Series H (and potentially but untested Series J) Smart TVs from Samsung
 
 # To run you will need python3 and packages present in requirements.txt as well as cec-utils
 ```
