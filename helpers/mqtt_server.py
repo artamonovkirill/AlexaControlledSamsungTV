@@ -195,6 +195,7 @@ def test_command():
 
 
 def startServer(muteoutput):
+    global remote
     global tv_listings_dict
     global tv_channels
     global tv_dict

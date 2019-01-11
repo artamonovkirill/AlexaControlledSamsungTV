@@ -90,7 +90,7 @@ class SmartCrypto:
         requests.delete(full_url)
         return False
 
-    def send_command(session_id, ctx, key_command):
+    def send_command(self, session_id, ctx, key_command):
         ctx = ctx.upper()
         millis = int(round(time.time() * 1000))
         step4_url = 'http://' + tvIP + ':8000/socket.io/1/?t=' + str(millis)
@@ -116,29 +116,29 @@ class SmartCrypto:
         self.tvIP = ip
         if (True):
             self.StartPairing()
-            ctx = False
+            self.ctx = False
             SKPrime = False
-            while not ctx:
+            while self.ctx == '':
                 tvPIN = input("Please enter pin from tv: ")
                 print("Got pin: '"+tvPIN+"'\n")
                 self.FirstStepOfPairing()
                 output = self.HelloExchange(tvPIN)
                 if output:
-                    ctx = output['ctx'].hex()
+                    self.ctx = output['ctx'].hex()
                     SKPrime = output['SKPrime']
                     print("ctx: " + ctx)
                     print("Pin accepted :)\n")
                 else:
                     print("Pin incorrect. Please try again...\n")
 
-            currentSessionId = self.AcknowledgeExchange(SKPrime)
-            print("SessionID: " + str(currentSessionId))
+            self.currentSessionId = self.AcknowledgeExchange(SKPrime)
+            print("SessionID: " + str(self.currentSessionId))
 
             self.ClosePinPageOnTv()
             print("Authorization successfull :)\n")
         else:
-            currentSessionId = 0 #copied sessionId from previous connection
-            ctx = '' #copied ctf from previous connection
-    def control(command):
+            self.currentSessionId = 0 #copied sessionId from previous connection
+            self.ctx = '' #copied ctf from previous connection
+    def control(self, command):
         print(command)
-        self.send_command(currentSessionId, ctx, command)
+        self.send_command(self.currentSessionId, self.ctx, command)
