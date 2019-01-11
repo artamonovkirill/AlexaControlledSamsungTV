@@ -15,6 +15,9 @@ class SmartCrypto:
     tvIP = "192.168.xxx.xxx"
     tvPort = "8080"
 
+    ctf = ''
+    currentSessionId = 0
+
     lastRequestId = 0
     def getFullUrl(self, urlPath):
         return "http://" + self.tvIP + ":" + self.tvPort + urlPath
