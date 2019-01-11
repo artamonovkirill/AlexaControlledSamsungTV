@@ -9,6 +9,7 @@ from helpers import prefHelper
 import math
 from difflib import get_close_matches
 import os.path
+from SmartCrypto import smartcrypto
 
 def power_off_command(tv_mac_address):
     if tv_dict[tv_mac_address]['tv_model'][4] <= 'F':
@@ -58,6 +59,7 @@ tv_listings_dict = {}
 tv_channels = []
 tv_dict = {}
 mute = False
+remote = None
 
 def printmsg(message):
     if not mute:
@@ -193,12 +195,11 @@ def test_command():
 
 
 def startServer(muteoutput):
-    from SmartCrypto import smartcrypto as remote
     global tv_listings_dict
     global tv_channels
     global tv_dict
     global mute
-
+    remote = SmartCrypto()
     mute = muteoutput
     if os.path.isfile('helpers/lineup.json'):
         with open('helpers/lineup.json') as json_data:
