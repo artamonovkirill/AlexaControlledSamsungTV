@@ -197,9 +197,11 @@ def connect(myMQTTClient):
     for i in range(0, 1000):
         try:
             myMQTTClient.connect()
+            time.sleep(0.5)
         except:
             continue;
         return
+    raise Exception("Could not connect")
 
 
 def startServer(muteoutput):
@@ -265,6 +267,7 @@ def startServer(muteoutput):
                 response = requests.post('https://alexasmarttv.tk/api/v1/ping', data=json.dumps(payload), headers=headers)
             except:
                 print('failed to ping')
+                continue
 
         counter += 1
         counter = counter%900
