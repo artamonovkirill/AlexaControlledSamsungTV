@@ -267,7 +267,6 @@ def startServer(muteoutput):
                 response = requests.post('https://alexasmarttv.tk/api/v1/ping', data=json.dumps(payload), headers=headers)
             except:
                 print('failed to ping')
-                continue
 
         counter += 1
         counter = counter%900

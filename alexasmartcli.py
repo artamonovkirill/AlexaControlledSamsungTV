@@ -7,6 +7,7 @@ import tvconfig
 import re
 from helpers import mqtt_server
 import os
+import socket
 from helpers.ssdp import scan_network_ssdp
 
 url = "https://alexasmarttv.tk"
@@ -23,7 +24,18 @@ def _parse_options():
     except Exception as e:
         print("Exception while parsing arguments: " + str(e))
 
-
+def wait_for_internet_connection():
+    for i in range(0,100000):
+        try:
+            # host = socket.gethostbyname("https://www.google.com")
+            # print(host)
+            socket.create_connection(("www.google.com", 80))
+            print("Connected to the internet")
+            return
+        except Exception as e:
+            print(e)
+            pass
+    raise Exception('No internet detected')
 
 options, args = _parse_options()
 
@@ -34,7 +46,7 @@ os.chdir(dname)
 if len(args) == 0:
     print('please specify an action')
     exit()
-    
+
 if args[0] == 'login':
     print("Login to your alexasmarttv.tk account")
     email = input("Email: ")
@@ -64,8 +76,8 @@ if args[0] == 'reset':
     os.remove('.auth/private.pem.key')
     os.remove('.auth/certificate.pem.crt')
     print("Reset device. you will now need to relogin and register this device")
-    
-        
+
+
 if args[0] == 'register':
     if not prefHelper.loggedIn():
         print('Error: please log in before registering device.')
@@ -74,15 +86,15 @@ if args[0] == 'register':
         tvs = []
         for tv in tvconfig.tvs:
             tvs.append({'name':tv['tv_name'], 'mac_address': tv['tv_mac_address']})
-            
+
         payload ={"name": tvconfig.device_name, "tvs": tvs}
         reregister = False
         if prefHelper.deviceRegistered():
             payload['uuid'] = prefHelper.deviceUUID()
             reregister = True
-            
+
         headers = {'content-type': 'application/json', 'jwt': prefHelper.deviceToken()}
-        
+
         response = requests.post(url + '/api/v1/register_device', data=json.dumps(payload), headers=headers)
         json_data = json.loads(response.text)
         if 'error' in json_data:
@@ -91,11 +103,11 @@ if args[0] == 'register':
             file = open('.auth/uuid','w')
             file.write(json_data['uuid'])
             file.close
-            
+
             file = open('.auth/private.pem.key','w')
             file.write(json_data['private_key'])
             file.close
-            
+
             file = open('.auth/certificate.pem.crt','w')
             file.write(json_data['pubic_certificate'])
             file.close
@@ -103,8 +115,8 @@ if args[0] == 'register':
                 print("device successfully reregistered.")
             else:
                 print("device successfully registered.")
-            
-            
+
+
 if args[0] == 'setup_cable':
     print("Setting up your cable.")
     zipcode = input("Enter Zipcode (Leave empty to skip this step if it does not work or you are outside the US): ")
@@ -113,7 +125,7 @@ if args[0] == 'setup_cable':
         providerlist = []
         index = 0
         print("Providers found in your area: ")
-        
+
         for provider in json.loads(response.text):
             for device in provider["Devices"]:
                 print(str(index+1) + ') ' + provider["Name"] + ("" if device["DeviceName"] == "" else "   (" +  device["DeviceName"] + ")"))
@@ -124,26 +136,26 @@ if args[0] == 'setup_cable':
         lineup = {}
         for channel in json.loads(response.text):
             full = channel["Channel"]["FullName"]
-            
+
             regex = re.compile('\(.+?\)')
             full = regex.sub('', full).lower()
             full = full.replace('&','and')
             full = full.replace('the ', '')
             full = full.replace(' channel', '')
-    
-    
+
+
             pattern = re.compile('([^\s\w]|_)+')
             full = pattern.sub('', full)
-            
+
             name = channel["Channel"]["Name"].lower()
             name = pattern.sub('', name)
-            num = channel["Channel"]["Number"] 
-    
+            num = channel["Channel"]["Number"]
+
             if " hdtv" in full or " hd" in full:
                 full = full.replace(' hdtv','')
                 full = full.replace(' hd','')
                 full = full.strip()
-                
+
                 if name.endswith("hd"):
                     name = name[:-2]
                 elif name.endswith("d"):
@@ -161,7 +173,7 @@ if args[0] == 'setup_cable':
                 elif full not in lineup:
                     lineup[full] = (name,full,num,None)
         sortedlist = sorted(lineup.values(), key=lambda x: (float(x[2]) if x[2] is not None else float(x[3])))
-       
+
         with open('helpers/lineup.json', 'w') as outfile:
             json.dump(sortedlist, outfile)
         #for value in sortedlist:
@@ -171,13 +183,11 @@ if args[0] == 'setup_cable':
     else:
          with open('helpers/lineup.json', 'w') as outfile:
              outfile.write('[]')
-             
 
 
 if args[0] == 'start':
     if not prefHelper.loggedIn():
         print('Error: please log in before starting server.')
     else:
+        wait_for_internet_connection()
         mqtt_server.startServer(options.mute)
-
-
