@@ -1,6 +1,5 @@
 from AWSIoTPythonSDK.MQTTLib import AWSIoTMQTTClient
 import time
-import samsungctl_ts
 import tvconfig
 import json
 import os
