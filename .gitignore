@@ -5,3 +5,6 @@
 helpers/lineup.json
 *__pycache__*
 SmartCrypto/.git/*
+bin/*
+lib/*
+include/*
