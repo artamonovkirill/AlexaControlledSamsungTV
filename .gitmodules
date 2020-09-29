@@ -1,6 +1,6 @@
 [submodule "SmartCrypto2"]
 	path = SmartCrypto2
-	url = ../SmartCrypto/
+	url = https://github.com/bencarlisle15/SmartCrypto.git
 [submodule "SmartCrypto"]
 	path = SmartCrypto
-	url = ../SmartCrypto/
+	url = https://github.com/bencarlisle15/SmartCrypto.git
