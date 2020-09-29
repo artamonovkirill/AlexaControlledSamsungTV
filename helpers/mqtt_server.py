@@ -8,7 +8,7 @@ from helpers import prefHelper
 import math
 from difflib import get_close_matches
 import os.path
-from SmartCrypto.smartcrypto import SmartCrypto
+import SmartCrypto.smartcrypto
 
 def power_off_command(tv_mac_address):
     if tv_dict[tv_mac_address]['tv_model'][4] <= 'F':
