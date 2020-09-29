@@ -10,7 +10,7 @@ import os
 import socket
 from helpers.ssdp import scan_network_ssdp
 
-url = "https://alexasmarttv.tk"
+url = "https://alexasmarttv.dev"
 def _parse_options():
     """
     Parse the command line arguments for script
@@ -48,7 +48,7 @@ if len(args) == 0:
     exit()
 
 if args[0] == 'login':
-    print("Login to your alexasmarttv.tk account")
+    print("Login to your alexasmarttv.dev account")
     email = input("Email: ")
     password = getpass.getpass(prompt='Password: ')
     payload ={"email": email, "password": password}
