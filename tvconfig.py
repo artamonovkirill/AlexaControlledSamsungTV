@@ -1,4 +1,4 @@
-device_name = "Pi" #What shows up under devices in alexasmarttv.dev. not that important unless you have multiple devices (not tvs) on your account
+device_name = "Pi" #What shows up under devices in smarttv.tomershemesh.me. not that important unless you have multiple devices (not tvs) on your account
 volume_step_size = 5  #how much your tv volume should go up by when you say 'Alexa, turn up the volume on my tv'
 
 

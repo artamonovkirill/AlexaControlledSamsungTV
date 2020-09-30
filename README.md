@@ -7,7 +7,7 @@ sudo apt-get install cec-utils
 ```
 ## Setup
 
-First you will need an online account. Create one at https://alexasmarttv.dev
+First you will need an online account. Create one at https://smarttv.tomershemesh.me
 Then clone this project onto your raspberryPi
 
 Then turn on your TV and run the following commands to get up and running
@@ -19,7 +19,7 @@ python3 alexasmartcli.py scan
 It should output the ip, mac address, and model.    
 put those into the tvconfig.py file. The tvconfig should be in this format:
 ```
-device_name = "Pi" #What shows up under devices in alexasmarttv.dev. not that important unless you have multiple devices (not tvs) on your account
+device_name = "Pi" #What shows up under devices in smarttv.tomershemesh.me. not that important unless you have multiple devices (not tvs) on your account
 volume_step_size = 5  #how much your tv volume should go up by when you say 'Alexa, turn up the volume on my tv'
 
 
