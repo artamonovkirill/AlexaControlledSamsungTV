@@ -8,7 +8,7 @@ from helpers import prefHelper
 import math
 from difflib import get_close_matches
 import os.path
-import SmartCrypto.smartcrypto
+from SmartCrypto.smartcrypto import control
 
 def power_off_command(tv_mac_address):
     if tv_dict[tv_mac_address]['tv_model'][4] <= 'F':
@@ -58,7 +58,6 @@ tv_listings_dict = {}
 tv_channels = []
 tv_dict = {}
 mute = False
-remote = None
 
 def printmsg(message):
     if not mute:
@@ -77,7 +76,7 @@ def power(client, userdata, message):
         if payload['operation'] == 'TurnOn':
             os.system('echo on 0 | cec-client -s -d 1')
         elif payload['operation'] == 'TurnOff':
-            remote.control(power_off_command(payload['endpointid']))
+            control(power_off_command(payload['endpointid']))
 
 
     except BaseException as e:
@@ -95,8 +94,8 @@ def channel(client, userdata, message):
         if payload['operation'] == 'ChangeChannel':
             if 'number' in payload['channel_data']['channel']:
                 for c in payload['channel_data']['channel']['number']:
-                    remote.control("KEY_" + str(c))
-                remote.control("KEY_ENTER")
+                    control("KEY_" + str(c))
+                control("KEY_ENTER")
 
             else:
                 channel_name = ''
@@ -117,12 +116,12 @@ def channel(client, userdata, message):
                         num = str(chan[2])
                     print(channel_name + ':   closest match - ' + res[0] + '     -  ' + str(num))
                     if str(num) == "NETFLIX":
-                        remote.control("KEY_CONTENTS")
-                        remote.control("KEY_ENTER")
+                        control("KEY_CONTENTS")
+                        control("KEY_ENTER")
                     else:
                         for c in num:
-                            remote.control("KEY_" + str(c))
-                        remote.control("KEY_ENTER")
+                            control("KEY_" + str(c))
+                        control("KEY_ENTER")
 
 
         elif payload['operation'] == 'SkipChannels':
@@ -131,7 +130,7 @@ def channel(client, userdata, message):
             steps = abs(steps)
 
             for i in range(0,steps):
-                remote.control("KEY_CHDOWN" if chandown else "KEY_CHUP")
+                control("KEY_CHDOWN" if chandown else "KEY_CHUP")
                 time.sleep(0.05) #delay for volume
     except BaseException as e:
         print("Failed to send message to TV: " + str(e))
@@ -145,7 +144,7 @@ def speaker(client, userdata, message):
 
     try:
         if payload['operation'] == 'SetMute':
-            remote.control("KEY_MUTE")
+            control("KEY_MUTE")
         elif payload['operation'] == 'AdjustVolume':
             steps = payload['volumeSteps']
             voldown = steps < 0
@@ -155,7 +154,7 @@ def speaker(client, userdata, message):
                 steps = tvconfig.volume_step_size
 
             for i in range(0,steps):
-                remote.control("KEY_VOLDOWN" if voldown else "KEY_VOLUP")
+                control("KEY_VOLDOWN" if voldown else "KEY_VOLUP")
     except BaseException as e:
         print("Failed to send message to TV: " + str(e))
 
@@ -167,9 +166,9 @@ def playback(client, userdata, message):
 
     try:
         if payload['operation'] == 'Pause' or payload['operation'] == 'Stop':
-            remote.control("KEY_PAUSE")
+            control("KEY_PAUSE")
         elif payload['operation'] == 'Play':
-            remote.control("KEY_PLAY")
+            control("KEY_PLAY")
     except BaseException as e:
         print("Failed to send message to TV: " + str(e))
 
@@ -190,7 +189,7 @@ def test_command():
             tv_listings_dict[chan[0]] = chan
             tv_listings_dict[chan[1]] = chan
 
-    remote.control("KEY_MUTE")
+    control("KEY_MUTE")
 
 def connect(myMQTTClient):
     for i in range(0, 1000):
@@ -204,12 +203,10 @@ def connect(myMQTTClient):
 
 
 def startServer(muteoutput):
-    global remote
     global tv_listings_dict
     global tv_channels
     global tv_dict
     global mute
-    remote = SmartCrypto(tvconfig.tvs[0]['host'])
     mute = muteoutput
     if os.path.isfile('helpers/lineup.json'):
         with open('helpers/lineup.json') as json_data:
@@ -263,7 +260,7 @@ def startServer(muteoutput):
             payload ={"uuid": prefHelper.deviceUUID()}
             headers = {'content-type': 'application/json', 'jwt': prefHelper.deviceToken()}
             try:
-                response = requests.post('https://alexasmarttv.dev/api/v1/ping', data=json.dumps(payload), headers=headers)
+                response = requests.post('https://smarttv.tomershemesh.me/api/v1/ping', data=json.dumps(payload), headers=headers)
             except:
                 print('failed to ping')
 
